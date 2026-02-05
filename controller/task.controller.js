@@ -24,4 +24,20 @@ taskController.getTask = async (req, res) => {
   }
 }
 
+taskController.updateTask = async (req, res) => { 
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {new: true, runValidators: true}//req.body에 스키마 검증을 적용
+    );
+    if (!updatedTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.status(200).json({ status: 'success', data: updatedTask });
+  } catch (error) {
+    res.status(400).json({ status: 'fail', error });
+  }
+}
+
 module.exports = taskController;
