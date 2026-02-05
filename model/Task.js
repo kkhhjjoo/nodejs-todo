@@ -10,7 +10,7 @@ const taskScheme = Schema({
     type: Boolean,
     required: true
   }
-})
+}, { timestamps: true });
 
 const Task = mongoose.model("Task", taskScheme);
 
