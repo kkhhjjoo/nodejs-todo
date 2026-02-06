@@ -4,5 +4,6 @@ const router = express.Router();
 
 //1. 회원가입 endpoint
 router.post('/', userController.createUser);
+router.post('/login', userController.loginWithEmail);
 
 module.exports = router;

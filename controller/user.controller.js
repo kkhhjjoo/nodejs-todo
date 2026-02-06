@@ -30,4 +30,28 @@ userController.createUser = async (req, res) => {
   }
 }
 
+userController.loginWithEmail = async (req,res) => {
+  try {
+    const { email, password } = req.body
+    const user = await User.findOne({ email },'-createdAt -updatedAt -__v');
+    if (user) { 
+      const isMatch = bcrypt.compareSync(password, user.password);
+      if (isMatch) { 
+        const token = user.generateToken();
+        return res.status(200).json({ status: 'success', user, token });
+      }
+      throw new Error('아이디 또는 비밀번호가 일치하지 않습니다')
+    }
+  } catch (error) { 
+    res.status(400).json({ status: 'fail', error });
+  }
+}
+//2-1. 라우터 설정
+//2-2. 이메일 패스워드 정보 읽어오기
+//2-3. 이메일을 가지고 유저정보 가져오기
+//2-4. 이 유저에 디비에 있는 패스워스와 프론트엔드가 보낸 패스워드가 같은지 비교
+//2-5. 맞다! 그러면 토큰 발행
+//2-6. 틀리면 에러메세지 보냄
+//2-7. 응답으로 유저정보 + 토큰 보냄
+
 module.exports = userController
