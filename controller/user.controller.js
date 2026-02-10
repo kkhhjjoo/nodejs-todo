@@ -53,5 +53,18 @@ userController.loginWithEmail = async (req,res) => {
 //2-5. 맞다! 그러면 토큰 발행
 //2-6. 틀리면 에러메세지 보냄
 //2-7. 응답으로 유저정보 + 토큰 보냄
+userController.getUser = async (req, res) => { 
+  try {
+    const {userId} = req //req.userId
+    const user = User.findById(userId);
+    if (!user) {
+      throw new Error('can not find user');
+    }
+    res.status(200).json({ status: 'success', user });
+  } catch (error) { 
+     res.status(400).json({ status: 'fail', error:error.message });
+  }
+};
 
 module.exports = userController
+
